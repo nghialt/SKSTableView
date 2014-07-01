@@ -24,23 +24,7 @@
  * The boolean value showing the receiver is expanded or not. The default value of this property is NO.
  */
 @property (nonatomic, assign, getter = isExpanded) BOOL expanded;
-
-/**
- * Adds an indicator view into the receiver when the relevant cell is expanded.
- */
-- (void)addIndicatorView;
-
-/**
- * Removes the indicator view from the receiver when the relevant cell is collapsed.
- */
-- (void)removeIndicatorView;
-
-/**
- * Returns a boolean value showing if the receiver contains an indicator view or not.
- *
- *  @return The boolean value for the indicator view.
- */
-- (BOOL)containsIndicatorView;
+@property (nonatomic, assign) UIEdgeInsets cellMargin;
 
 - (void)accessoryViewAnimation;
 

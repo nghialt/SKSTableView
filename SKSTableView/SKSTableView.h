@@ -112,6 +112,8 @@
  */
 @property (nonatomic, assign) BOOL shouldExpandOnlyOneCell;
 
+@property (nonatomic, assign) UIEdgeInsets cellMargin;
+
 /**
  * Collapses all currently-expanded cells in the tableview altogether. No subrow is displayed, just main rows.
  */

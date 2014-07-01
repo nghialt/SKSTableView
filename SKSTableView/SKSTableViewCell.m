@@ -12,7 +12,8 @@
 #define kIndicatorViewTag -1
 
 @interface SKSTableViewCell ()
-
+@property(nonatomic) UIImageView* customAccessoryView;
+@property(nonatomic) BOOL isLayoutCustomAccessoryView;
 @end
 
 @implementation SKSTableViewCell
@@ -23,6 +24,7 @@
     if (self) {
         self.expandable = YES;
         self.expanded = NO;
+        self.accessoryView = [self expandableView];
     }
     return self;
 }
@@ -30,15 +32,10 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    
-    if (self.isExpanded) {
-        
-        if (![self containsIndicatorView])
-            [self addIndicatorView];
-        else {
-            [self removeIndicatorView];
-            [self addIndicatorView];
-        }
+
+    if (!self.isLayoutCustomAccessoryView) {
+        self.isLayoutCustomAccessoryView = TRUE;
+        self.customAccessoryView.center = self.accessoryView.center;
     }
 }
 
@@ -46,23 +43,23 @@ static UIImage *_image = nil;
 - (UIView *)expandableView
 {
     if (!_image) {
-        _image = [UIImage imageNamed:@"expandableImage.png"];
+        _image = [UIImage imageNamed:@"profile_accessory_view.png"];
     }
-    
+
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     CGRect frame = CGRectMake(0.0, 0.0, _image.size.width, _image.size.height);
     button.frame = frame;
-    
-    [button setBackgroundImage:_image forState:UIControlStateNormal];
-    
+
+    UIImageView* imageView = [[UIImageView alloc] initWithImage:_image];
+    imageView.center = CGPointZero;
+    self.customAccessoryView = [[UIImageView alloc] initWithImage:_image];
+    [self addSubview:self.customAccessoryView];
+
     return button;
 }
 
 - (void)setExpandable:(BOOL)isExpandable
 {
-    if (isExpandable)
-        [self setAccessoryView:[self expandableView]];
-    
     _expandable = isExpandable;
 }
 
@@ -71,26 +68,6 @@ static UIImage *_image = nil;
     [super setSelected:selected animated:animated];
 }
 
-- (void)addIndicatorView
-{
-    CGPoint point = self.accessoryView.center;
-    CGRect bounds = self.accessoryView.bounds;
-    
-    CGRect frame = CGRectMake((point.x - CGRectGetWidth(bounds) * 1.5), point.y * 1.4, CGRectGetWidth(bounds) * 3.0, CGRectGetHeight(self.bounds) - point.y * 1.4);
-    SKSTableViewCellIndicator *indicatorView = [[SKSTableViewCellIndicator alloc] initWithFrame:frame];
-    indicatorView.tag = kIndicatorViewTag;
-    [self.contentView addSubview:indicatorView];
-}
-
-- (void)removeIndicatorView
-{
-    id indicatorView = [self.contentView viewWithTag:kIndicatorViewTag];
-    if (indicatorView)
-    {
-        [indicatorView removeFromSuperview];
-        indicatorView = nil;
-    }
-}
 
 - (BOOL)containsIndicatorView
 {
@@ -99,20 +76,24 @@ static UIImage *_image = nil;
 
 - (void)accessoryViewAnimation
 {
-    [UIView animateWithDuration:0.2 animations:^{
+    [UIView animateWithDuration:0.2f animations:^{
         if (self.isExpanded) {
-            
-            self.accessoryView.transform = CGAffineTransformMakeRotation(M_PI);
-            
+            self.customAccessoryView.transform = CGAffineTransformMakeRotation(M_PI_2);
         } else {
-            self.accessoryView.transform = CGAffineTransformMakeRotation(0);
+            self.customAccessoryView.transform = CGAffineTransformMakeRotation(0);
         }
     } completion:^(BOOL finished) {
-        
-        if (!self.isExpanded)
-            [self removeIndicatorView];
-        
     }];
+}
+
+- (void)setFrame:(CGRect)frame {
+    if (!UIEdgeInsetsEqualToEdgeInsets(self.cellMargin, UIEdgeInsetsZero)) {
+        frame.origin.x += self.cellMargin.left;
+        frame.origin.y += self.cellMargin.top;
+        frame.size.width -= (self.cellMargin.left + self.cellMargin.right);
+        frame.size.height -= (self.cellMargin.top + self.cellMargin.bottom);
+    }
+    [super setFrame:frame];
 }
 
 @end
