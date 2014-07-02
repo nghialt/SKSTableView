@@ -151,6 +151,8 @@ CGFloat const kDefaultCellHeight = 44.0f;
     else
     {
         UITableViewCell *cell = [_SKSTableViewDelegate tableView:(SKSTableView *)tableView cellForSubRowAtIndexPath:correspondingIndexPath];
+        cell.backgroundColor = [UIColor clearColor];
+        cell.backgroundView = nil;
         return cell;
     }
 }
@@ -208,12 +210,12 @@ CGFloat const kDefaultCellHeight = 44.0f;
                 if (cell.isExpanded)
                 {
                     [self setExpanded:YES forCellAtIndexPath:correspondingIndexPath];
-                    [self insertRowsAtIndexPaths:expandedIndexPaths withRowAnimation:UITableViewRowAnimationTop];
+                    [self insertRowsAtIndexPaths:expandedIndexPaths withRowAnimation:UITableViewRowAnimationMiddle];
                 }
                 else
                 {
                     [self setExpanded:NO forCellAtIndexPath:correspondingIndexPath];
-                    [self deleteRowsAtIndexPaths:expandedIndexPaths withRowAnimation:UITableViewRowAnimationTop];
+                    [self deleteRowsAtIndexPaths:expandedIndexPaths withRowAnimation:UITableViewRowAnimationMiddle];
                 }
             
                 [cell accessoryViewAnimation];
