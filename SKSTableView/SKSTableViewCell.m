@@ -43,7 +43,7 @@ static UIImage *_image = nil;
 - (UIView *)expandableView
 {
     if (!_image) {
-        _image = IMG_FOR_DEVICE(@"profile_accessory_view", @".png", YES);
+        _image = [UIImage imageNamed:@"expandableImage.png"];
     }
 
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];

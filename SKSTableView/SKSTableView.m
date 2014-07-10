@@ -313,6 +313,12 @@ CGFloat const kDefaultCellHeight = 44.0f;
     return [_SKSTableViewDelegate tableView:self numberOfSubRowsAtIndexPath:indexPath];
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if ([self.SKSTableViewDelegate respondsToSelector:@selector(scrollViewWillBeginDragging:)]) {
+        [self.SKSTableViewDelegate scrollViewWillBeginDragging:scrollView];
+    }
+}
+
 - (NSIndexPath *)correspondingIndexPathForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     __block NSIndexPath *correspondingIndexPath = nil;
